@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TheatreBookingDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TheatreTable">
+          <Key>
+            <PropertyRef Name="TheatreId" />
+          </Key>
+          <Property Name="TheatreId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TheatreName" Type="varchar" MaxLength="50" />
+          <Property Name="EntryPerUser" Type="int" />
+        </EntityType>
+        <EntityType Name="UserTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="DateOfRegistration" Type="date" />
+          <Property Name="ContactNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="varchar" MaxLength="500" />
+          <Property Name="Theat_Id" Type="int" />
+        </EntityType>
+        <Association Name="FK_UserTable_TheatreTable">
+          <End Role="TheatreTable" Type="Self.TheatreTable" Multiplicity="0..1" />
+          <End Role="UserTable" Type="Self.UserTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TheatreTable">
+              <PropertyRef Name="TheatreId" />
+            </Principal>
+            <Dependent Role="UserTable">
+              <PropertyRef Name="Theat_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserTable_UserTable">
+          <End Role="UserTable" Type="Self.UserTable" Multiplicity="1" />
+          <End Role="UserTable1" Type="Self.UserTable" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="UserTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserTable1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TheatreBookingDBModelStoreContainer">
+          <EntitySet Name="TheatreTable" EntityType="Self.TheatreTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTable" EntityType="Self.UserTable" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_UserTable_TheatreTable" Association="Self.FK_UserTable_TheatreTable">
+            <End Role="TheatreTable" EntitySet="TheatreTable" />
+            <End Role="UserTable" EntitySet="UserTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserTable_UserTable" Association="Self.FK_UserTable_UserTable">
+            <End Role="UserTable" EntitySet="UserTable" />
+            <End Role="UserTable1" EntitySet="UserTable" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TheatreBookingDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TheatreTable">
+          <Key>
+            <PropertyRef Name="TheatreId" />
+          </Key>
+          <Property Name="TheatreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TheatreName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntryPerUser" Type="Int32" />
+          <NavigationProperty Name="UserTables" Relationship="Self.FK_UserTable_TheatreTable" FromRole="TheatreTable" ToRole="UserTable" />
+        </EntityType>
+        <EntityType Name="UserTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateOfRegistration" Type="DateTime" Precision="0" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Theat_Id" Type="Int32" />
+          <NavigationProperty Name="TheatreTable" Relationship="Self.FK_UserTable_TheatreTable" FromRole="UserTable" ToRole="TheatreTable" />
+          </EntityType>
+        <Association Name="FK_UserTable_TheatreTable">
+          <End Role="TheatreTable" Type="Self.TheatreTable" Multiplicity="0..1" />
+          <End Role="UserTable" Type="Self.UserTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TheatreTable">
+              <PropertyRef Name="TheatreId" />
+            </Principal>
+            <Dependent Role="UserTable">
+              <PropertyRef Name="Theat_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TheatreBookingDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TheatreTables" EntityType="Self.TheatreTable" />
+          <EntitySet Name="UserTables" EntityType="Self.UserTable" />
+          <AssociationSet Name="FK_UserTable_TheatreTable" Association="Self.FK_UserTable_TheatreTable">
+            <End Role="TheatreTable" EntitySet="TheatreTables" />
+            <End Role="UserTable" EntitySet="UserTables" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TheatreBookingDBModelStoreContainer" CdmEntityContainer="TheatreBookingDBEntities">
+          <EntitySetMapping Name="TheatreTables">
+            <EntityTypeMapping TypeName="TheatreBookingDBModel.TheatreTable">
+              <MappingFragment StoreEntitySet="TheatreTable">
+                <ScalarProperty Name="TheatreId" ColumnName="TheatreId" />
+                <ScalarProperty Name="TheatreName" ColumnName="TheatreName" />
+                <ScalarProperty Name="EntryPerUser" ColumnName="EntryPerUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTables">
+            <EntityTypeMapping TypeName="TheatreBookingDBModel.UserTable">
+              <MappingFragment StoreEntitySet="UserTable">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DateOfRegistration" ColumnName="DateOfRegistration" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Theat_Id" ColumnName="Theat_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
